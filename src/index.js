@@ -38,3 +38,45 @@ function handleStart(evt) {
     console.log("touchstart:" + i + ".");
   }
 }
+// Drawing as the touches move： handleMove() function is called when a touchmove event is delivered (Each time one or more fingers move)
+// What it does： update the cached touch information and to draw a line from the previous position to the current position of each touch.
+function handleMove(evt) {
+  evt.preventDefault();
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+  // iterates over the changed touches to determine the starting point for each touch's new line segment to be drawn
+  for (var i = 0; i < touches.length; i++) {
+    var color = colorForTouch(touches[i]);
+
+    // check each touch's Touch.identifier property: a unique integer for each touch and remains consistent for each event during the duration of each finger's contact with the surface
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+    //  get the coordinates of the previous position of each touch and
+    if (idx >= 0) {
+      console.log("continuing touch " + idx);
+      // use the appropriate context methods to draw a line segment joining the two positions together
+      ctx.beginPath();
+      console.log(
+        "ctx.moveTo(" +
+          ongoingTouches[idx].pageX +
+          ", " +
+          ongoingTouches[idx].pageY +
+          ");"
+      );
+      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+      console.log(
+        "ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");"
+      );
+      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = color;
+      ctx.stroke();
+      // replace the previous information about the touchpoint with the current information in the ongoingTouches array.
+      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
+      console.log(".");
+    } else {
+      console.log("can't figure out which touch to continue");
+    }
+  }
+}
