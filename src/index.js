@@ -142,3 +142,16 @@ function colorForTouch(touch) {
 function copyTouch({ identifier, pageX, pageY }) {
   return { identifier, pageX, pageY };
 }
+
+// Finding an ongoing touch
+// scans through the ongoingTouches array to find the touch matching the given identifier then returns that touch's index into the array
+function ongoingTouchIndexById(idToFind) {
+  for (var i = 0; i < ongoingTouches.length; i++) {
+    var id = ongoingTouches[i].identifier;
+
+    if (id == idToFind) {
+      return i;
+    }
+  }
+  return -1; // not found
+}
