@@ -155,3 +155,9 @@ function ongoingTouchIndexById(idToFind) {
   }
   return -1; // not found
 }
+
+// Showing what's going on
+function log(msg) {
+  var p = document.getElementById("log");
+  p.innerHTML = msg + "\n" + p.innerHTML;
+}
