@@ -148,7 +148,7 @@ function copyTouch({ identifier, pageX, pageY }) {
 // scans through the ongoingTouches array to find the touch matching the given identifier then returns that touch's index into the array
 function ongoingTouchIndexById(idToFind) {
   for (var i = 0; i < ongoingTouches.length; i++) {
-    console.log(" ongoingTouches array", ongoingTouches.length);
+    log(`ongoingTouches array ${ongoingTouches.length}`);
     var id = ongoingTouches[i].identifier;
 
     if (id == idToFind) {
