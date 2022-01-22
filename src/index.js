@@ -16,12 +16,13 @@ var ongoingTouches = [];
 function handleStart(evt) {
   // keep the browser from continuing to process the touch event (this also prevents a mouse event from also being delivered)
   evt.preventDefault();
-  console.log("touchstart.");
+  log("touchstart.");
   var el = document.getElementById("canvas");
   //  get the context
   var ctx = el.getContext("2d");
   //  pull the list of changed touch points
   var touches = evt.changedTouches;
+  console.log("touches", touches);
 
   // iterate over all the Touch objects in the list
   for (var i = 0; i < touches.length; i++) {
@@ -147,6 +148,7 @@ function copyTouch({ identifier, pageX, pageY }) {
 // scans through the ongoingTouches array to find the touch matching the given identifier then returns that touch's index into the array
 function ongoingTouchIndexById(idToFind) {
   for (var i = 0; i < ongoingTouches.length; i++) {
+    console.log(" ongoingTouches array", ongoingTouches.length);
     var id = ongoingTouches[i].identifier;
 
     if (id == idToFind) {
