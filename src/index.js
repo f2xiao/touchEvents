@@ -80,3 +80,43 @@ function handleMove(evt) {
     }
   }
 }
+
+// Handling the end of a touch: handleEnd() is called on  a touchend event when the user lifts a finger off the surface
+// handleEnd does: draw the last line segment for each touch that ended and remove the touchpoint from the ongoing touch list.
+function handleEnd(evt) {
+  evt.preventDefault();
+  log("touchend");
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+
+  for (var i = 0; i < touches.length; i++) {
+    var color = colorForTouch(touches[i]);
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+    if (idx >= 0) {
+      ctx.lineWidth = 4;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+      ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8); // and a square at the end
+      ongoingTouches.splice(idx, 1); // remove it; we're done
+    } else {
+      console.log("can't figure out which touch to end");
+    }
+  }
+}
+
+// Handling canceled touches: handleCancel is called when  user's finger wanders into browser UI
+// handleCancel does: abort the touch , remove it from the ongoing touch list without drawing a final line segment.
+function handleCancel(evt) {
+  evt.preventDefault();
+  console.log("touchcancel.");
+  var touches = evt.changedTouches;
+
+  for (var i = 0; i < touches.length; i++) {
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1); // remove it; we're done
+  }
+}
